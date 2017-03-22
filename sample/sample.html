@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Roulette Wheel</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./../js/roulette.js"></script>
+  </head>
+  <body>
+    <div>
+      <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+    <div>
+      <input type="button" value="start roulette" id="start-roulette"/>
+      <input type="button" value="stop roulette" id="stop-roulette"/>
+      <div id="roulette-elapsed-time"></div>
+      <div id="roulette-angle"></div>
+      <div id="roulette-velocity"></div>
+      <img src="roulette.png" id="image" hidden/>
+    </div>
+    <script>
+      $(document).ready(function() {
+        var logger;
+        var roulette = Roulette(
+          document.getElementById('image'),
+          document.getElementById('canvas'),
+          function(data) {
+            console.log("Render");
+            $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
+            $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
+            $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.stepSize + 'ms');
+          },
+          function(data) {
+            console.log("Finished");
+            $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
+            $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
+            $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.stepSize + 'ms');
+          }
+        );
+
+        $('#start-roulette').click(roulette.start);
+        $('#stop-roulette').click(roulette.stop);
+      });
+    </script>
+  </body>
+</html>
