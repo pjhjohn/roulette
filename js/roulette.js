@@ -1,4 +1,4 @@
-var Roulette = function(imageElement, canvasElement, renderCallback, stopCallback) {
+var Roulette = function(imageElement, canvasElement, renderCallback, stopCallback, config) {
   var ctx;
   var image = imageElement;
   var canvas = canvasElement;
@@ -10,6 +10,13 @@ var Roulette = function(imageElement, canvasElement, renderCallback, stopCallbac
     spinAcceleration: 1.5, // degrees/step/step
     easeOutAcceleration: -1.0, // degrees/step/step
     requestTimeOut: 3000, // ms
+  }
+  if (config) {
+    option.stepSize = config.stepSize||option.stepSize;
+    option.maxVelocity = config.maxVelocity||option.maxVelocity;
+    option.spinAcceleration = config.spinAcceleration||option.spinAcceleration;
+    option.easeOutAcceleration = config.easeOutAcceleration||option.easeOutAcceleration;
+    option.requestTimeOut = config.requestTimeOut||option.requestTimeOut;
   }
   var roulette = {
     angle: 0, // degrees
