@@ -1,29 +1,29 @@
-var Roulette = function(imageElement, canvasElement, onRenderRoulette, onStopRoulette, option) {
+var Roulette = function(imageElement, canvasElement, option) {
   var ctx;
   var image = imageElement;
   var canvas = canvasElement;
   var config = {
-    stepSize: 30, // ms
+    step: 30, // ms
     maxVelocity: 30.0, // degrees/step
     spinAcceleration: 1.5, // degrees/step/step
-    easeOutAcceleration: -1.0, // degrees/step/step
-    requestTimeOut: 3000 // ms
+    spinDeceleration:-1.0, // degrees/step/step
   };
-  if (option) {
-    config.stepSize = option.stepSize||config.stepSize;
-    config.maxVelocity = option.maxVelocity||config.maxVelocity;
-    config.spinAcceleration = option.spinAcceleration||config.spinAcceleration;
-    config.easeOutAcceleration = option.easeOutAcceleration||config.easeOutAcceleration;
-    config.requestTimeOut = option.requestTimeOut||config.requestTimeOut;
-  }
   var roulette = {
-    onRenderCallback: onRenderRoulette,
-    onStopCallback: onStopRoulette,
     angle: 0, // degrees
     velocity: 0, // degrees/step
     elapsedTime: 0, // ms
-    spinning: false
+    spinning: false,
+    onRenderCallback: undefined,
+    onStopCallback: undefined
   };
+  if (option) {
+    config.step = option.step||config.step;
+    config.maxVelocity = option.maxVelocity||config.maxVelocity;
+    config.spinAcceleration = option.spinAcceleration||config.spinAcceleration;
+    config.spinDeceleration = option.spinDeceleration||config.spinDeceleration;
+    roulette.onRenderCallback = option.onRender||roulette.onRenderCallback;
+    roulette.onStopCallback = option.onStop||roulette.onStopCallback;
+  }
 
   var angle = function() {
     return roulette.angle;
@@ -40,9 +40,9 @@ var Roulette = function(imageElement, canvasElement, onRenderRoulette, onStopRou
 
   var start = function() {
     if (roulette.spinning) {
-      console.log("Roulette Already Started");
+      console.log("[Roulette] Already Started");
     } else {
-      console.log("Start Roulette");
+      console.log("[Roulette] Start");
       roulette.elapsedTime = 0;
       roulette.spinning = true;
       startRoulette();
@@ -51,9 +51,9 @@ var Roulette = function(imageElement, canvasElement, onRenderRoulette, onStopRou
 
   var stop = function() {
     if (!roulette.spinning) {
-      console.log("Roulette Already Stopped");
+      console.log("[Roulette] Already Stopped");
     } else {
-      console.log("Stop Roulette");
+      console.log("[Roulette] Stop");
       roulette.spinning = false;
     }
   };
@@ -67,9 +67,9 @@ var Roulette = function(imageElement, canvasElement, onRenderRoulette, onStopRou
       if (roulette.velocity > config.maxVelocity) roulette.velocity = config.maxVelocity;
       render(roulette.angle);
       setTimeout(function() {
-        roulette.elapsedTime += config.stepSize;
+        roulette.elapsedTime += config.step;
         startRoulette();
-      }, config.stepSize);
+      }, config.step);
     }
   };
 
@@ -81,16 +81,16 @@ var Roulette = function(imageElement, canvasElement, onRenderRoulette, onStopRou
         velocity: roulette.velocity,
         elapsedTime: roulette.elapsedTime,
         spinning: roulette.spinning,
-        stepSize: config.stepSize
+        step: config.step
       });
     } else {
       roulette.angle += roulette.velocity;
-      roulette.velocity += config.easeOutAcceleration;
+      roulette.velocity += config.spinDeceleration;
       render(roulette.angle);
       setTimeout(function() {
-        roulette.elapsedTime += config.stepSize;
+        roulette.elapsedTime += config.step;
         stopRoulette();
-      }, config.stepSize);
+      }, config.step);
     }
 
     /* Initial Render */
@@ -103,7 +103,7 @@ var Roulette = function(imageElement, canvasElement, onRenderRoulette, onStopRou
       velocity: roulette.velocity,
       elapsedTime: roulette.elapsedTime,
       spinning: roulette.spinning,
-      stepSize: config.stepSize
+      step: config.step
     });
     if (canvas.getContext) {
       ctx = canvas.getContext("2d");

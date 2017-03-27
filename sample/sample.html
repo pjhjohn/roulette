@@ -23,17 +23,19 @@
         var roulette = Roulette(
           document.getElementById('image'),
           document.getElementById('canvas'),
-          function(data) {
-            console.log("Render");
-            $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
-            $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
-            $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.stepSize + 'ms');
-          },
-          function(data) {
-            console.log("Finished");
-            $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
-            $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
-            $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.stepSize + 'ms');
+          {
+            onRender: function(data) {
+              console.log("Render");
+              $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
+              $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
+              $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.step + 'ms');
+            },
+            onStop: function(data) {
+              console.log("Stopped");
+              $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
+              $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
+              $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.step + 'ms');
+            }
           }
         );
 
