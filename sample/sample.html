@@ -13,28 +13,31 @@
     <div>
       <input type="button" value="start roulette" id="start-roulette"/>
       <input type="button" value="stop roulette" id="stop-roulette"/>
-      <div id="roulette-elapsed-time"></div>
+      <div id="roulette-time"></div>
       <div id="roulette-angle"></div>
       <div id="roulette-velocity"></div>
+      <div id="roulette-spinning"></div>
       <img src="roulette.png" id="image" hidden/>
     </div>
     <script>
       $(document).ready(function() {
+        var update = function(tag, data) {
+          console.log(tag);
+          $('#roulette-time').text('Roulette Time : ' + data.time + 'ms');
+          $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
+          $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.step + 'ms');
+          $('#roulette-spinning').text('Roulette Spinning : ' + data.spinning);
+        };
+
         var roulette = Roulette(
           document.getElementById('image'),
           document.getElementById('canvas'),
           {
             onRender: function(data) {
-              console.log("Render");
-              $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
-              $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
-              $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.step + 'ms');
+              update("Render", data);
             },
             onStop: function(data) {
-              console.log("Stopped");
-              $('#roulette-elapsed-time').text('Elapsed Time : ' + data.elapsedTime + 'ms');
-              $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
-              $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.step + 'ms');
+              update("Stopped", data);
             }
           }
         );
