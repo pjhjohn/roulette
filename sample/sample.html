@@ -11,8 +11,9 @@
       <canvas id="canvas" width="500" height="500"></canvas>
     </div>
     <div>
-      <input type="button" value="start roulette" id="start-roulette"/>
-      <input type="button" value="stop roulette" id="stop-roulette"/>
+      <input type="button" value="reset roulette" id="roulette-reset"/>
+      <input type="button" value="start roulette" id="roulette-start"/>
+      <input type="button" value="stop roulette" id="roulette-stop"/>
       <div id="roulette-time"></div>
       <div id="roulette-angle"></div>
       <div id="roulette-velocity"></div>
@@ -42,8 +43,9 @@
           }
         );
 
-        $('#start-roulette').click(roulette.start);
-        $('#stop-roulette').click(roulette.stop);
+        $('#roulette-reset').click(roulette.reset);
+        $('#roulette-start').click(roulette.start);
+        $('#roulette-stop').click(roulette.stop);
       });
     </script>
   </body>

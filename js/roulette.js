@@ -42,11 +42,11 @@ var Roulette = function(imageElement, canvasElement, option) {
     return roulette.spinning;
   };
 
-  var reset = function(params) {
+  var reset = function() {
     roulette.time = 0.0;
     roulette.angle = config.offset;
     roulette.velocity = config.minVelocity;
-    roulette.spinning = params.spinning||false;
+    roulette.spinning = false;
     render(roulette.angle);
   };
 
@@ -55,7 +55,7 @@ var Roulette = function(imageElement, canvasElement, option) {
       console.log("[Roulette] Already Started");
     } else {
       console.log("[Roulette] Start");
-      reset({spinning: true});
+      roulette.spinning = true;
       startRoulette();
     }
   };
