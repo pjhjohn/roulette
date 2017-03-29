@@ -11,9 +11,15 @@
       <canvas id="canvas" width="500" height="500"></canvas>
     </div>
     <div>
-      <input type="button" value="reset roulette" id="roulette-reset"/>
-      <input type="button" value="start roulette" id="roulette-start"/>
-      <input type="button" value="stop roulette" id="roulette-stop"/>
+      <input id="roulette-reset" type="button" value="reset roulette">
+      <input id="roulette-start" type="button" value="start roulette">
+      <input id="roulette-stop" type="button" value="stop roulette">
+
+      <input id="roulette-stop-angle" type="button" value="stop roulette with angle">
+      <label for="roulette-stop-angle-value"></label>
+      <input id="roulette-stop-angle-value" type="number" value="0">
+    </div>
+    <div style="font-family:sans-serif;padding:5px;">
       <div id="roulette-time"></div>
       <div id="roulette-angle"></div>
       <div id="roulette-velocity"></div>
@@ -23,7 +29,6 @@
     <script>
       $(document).ready(function() {
         var update = function(tag, data) {
-          console.log(tag);
           $('#roulette-time').text('Roulette Time : ' + data.time + 'ms');
           $('#roulette-angle').text('Roulette Angle : ' + data.angle%360 + '°');
           $('#roulette-velocity').text('Roulette Angular Velocity : ' + data.velocity + '°/' + data.step + 'ms');
@@ -45,7 +50,12 @@
 
         $('#roulette-reset').click(roulette.reset);
         $('#roulette-start').click(roulette.start);
-        $('#roulette-stop').click(roulette.stop);
+        $('#roulette-stop').click(function() {
+          roulette.stop();
+        });
+        $('#roulette-stop-angle').click(function() {
+          roulette.stop($('#roulette-stop-angle-value').val());
+        })
       });
     </script>
   </body>

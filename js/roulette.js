@@ -77,9 +77,37 @@ var Roulette = function(imageElement, canvasElement, option) {
     }
   };
 
-  var stop = function() {
+  var bounded = function(angle) {
+    var newAngle = angle % 360;
+    if (newAngle < 0) newAngle += 360;
+    return newAngle;
+  };
+
+  var stop = function(targetAngle) {
     if (!roulette.spinning) {
       console.log("[Roulette] Already Stopped");
+    } else if (targetAngle) {
+      if (config.deceleration >= 0) {
+        console.log("[Roulette] Unexpected deceleration value : " + config.deceleration);
+        config.deceleration = -0.001;
+        roulette.spinning = false;
+      } else {
+        console.log("[Roulette] Stop at " + targetAngle);
+
+        var diffVelocity = config.minVelocity - roulette.velocity;
+        var plusVelocity = config.minVelocity + roulette.velocity;
+        var originAngle, changeAngle, futureAngle, adjustAngle;
+
+        originAngle = bounded(roulette.angle);
+        changeAngle = (diffVelocity / (2 * config.deceleration)) * (plusVelocity - config.deceleration * config.step);
+        futureAngle = originAngle + changeAngle;
+        adjustAngle = bounded(targetAngle - futureAngle);
+        futureAngle += adjustAngle;
+        changeAngle = futureAngle - originAngle;
+
+        config.deceleration = diffVelocity * plusVelocity / (2 * changeAngle + config.step * diffVelocity);
+        roulette.spinning = false;
+      }
     } else {
       console.log("[Roulette] Stop");
       roulette.spinning = false;
